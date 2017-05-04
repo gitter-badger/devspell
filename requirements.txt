@@ -1,0 +1,6 @@
+pytest
+pytest-cov
+sphinx
+pyenchant
+bs4
+pyyaml
