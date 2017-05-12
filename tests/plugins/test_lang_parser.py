@@ -4,7 +4,7 @@ import pytest
 import context
 
 from context import devspell
-LangParser = devspell.plugins.lang_parser.LangParser
+LangParser = devspell.plugins.LangParser
 
 def test_lang_basic():
   """Test the basic operation of the lang parser"""
@@ -13,6 +13,7 @@ def test_lang_basic():
   parser = LangParser(None, None, parse=False)
   assert not parser.content
   assert not parser.lines.lines
+  assert not parser.sections.has_section(None)
 
   # Should get an exception trying to call parse since
   # it should be subclassed
@@ -24,6 +25,12 @@ def test_lang_basic():
   else:
     print("Bad")
     assert 0
+
+def test_clear_content():
+  """Test the content for a given section"""
+  parser = LangParser("path", "Some content", parse=False)
+  parser.sections.add_simple("Some content")
+  parser.sections.clear_content(parser.sections.sections[0])
 
 class TestParseStringLiterals():
 
