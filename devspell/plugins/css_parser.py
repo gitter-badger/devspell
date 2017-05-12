@@ -1,6 +1,10 @@
-from lang_parser import LangParser
+from cpp_parser import CppParser
 
-class CSSParser(LangParser):
+class CSSParser(CppParser):
 
   def parse(self):
-    pass
+    """Parse comments within CSS
+
+    Comments in CSS only support the /* */ format
+    """
+    self.parse_multi_comments()

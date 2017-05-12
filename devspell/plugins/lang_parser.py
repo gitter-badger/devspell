@@ -52,8 +52,6 @@ class LangParser(object):
       blob = self.content[sloc+1:eloc]
       cur = eloc + 1
       self.sections.add(blob, sloc, eloc + 1)
-    print("New content")
-    print(self.content)
 
   def parse_string_literals_double(self):
     self.set_title("string_literals - double")
@@ -130,6 +128,9 @@ class Section(object):
     self.end = None
     self.line = None
 
+  def __repr__(self):
+    return self.content
+
   def parse_words(self):
     for word in self.content.split():
       self.check_word(word.strip().lower())
@@ -166,16 +167,21 @@ class Sections(object):
     if (not section or
         section.start is None or
         section.end is None):
-      return
+      return False
     blank = ' ' * (section.end - section.start + 1)
     content = self.parser.content
-    self.parser.content = content[:section.start] + blank + content[section.end + 1:]
+    start = content[:section.start]
+    end = content[section.end + 1:]
+    self.parser.content = start + blank + end
+    return True
 
   def add_simple(self, content):
       item = Section(self.parser, content.strip())
       self.sections.append(item)
 
   def check_word(self, word):
+    if not word:
+      return
     if word in self.parser.processed:
       return
     if len(word) < 2:
@@ -185,3 +191,16 @@ class Sections(object):
     if not self.parser.enchant.check(word):
       print("Word {} is not valid".format(word))
     self.parser.processed.append(word)
+
+  def has_section(self, section):
+    """Check whether a section exists
+
+    :param section: The section str to check
+    :ptype section: str
+    """
+    if not section:
+      return False
+    for item in self.sections:
+      if item.content == section:
+        return True
+    return False
