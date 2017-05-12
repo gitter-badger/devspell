@@ -4,3 +4,4 @@ sphinx
 pyenchant
 bs4
 pyyaml
+python-coveralls
